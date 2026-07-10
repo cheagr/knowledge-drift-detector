@@ -61,44 +61,44 @@ if confluence_file and ado_file:
     st.success("Both artifacts parsed successfully.")
 
     st.divider()
-    with st.spinner("Generating AI comparision report"):
-        success, drift = compare_documents(confluence,ado)
+    # with st.spinner("Generating AI comparision report"):
+    #     success, drift = compare_documents(confluence,ado)
 
-    if success:
-        st.subheader("AI Compare ")
-        st.subheader("Executive Summary:")
-        st.write(drift["executive_summary"])
+    # if success:
+    #     st.subheader("AI Compare ")
+    #     st.subheader("Executive Summary:")
+    #     st.write(drift["executive_summary"])
             
-        st.subheader("⚠ Knowledge Drifts")
-        for knowledge_drift in drift["knowledge_drifts"]:
-            # st.write(f"• {knowledge_drift{}}")
-            st.write(f"**Area** -> {knowledge_drift['area']}")
-            st.write(f"• {knowledge_drift['confluence']}")
-            st.write(f"• {knowledge_drift['ado']}")
-            st.write(f"**Impact** -> {knowledge_drift['impact']}")
+    #     st.subheader("⚠ Knowledge Drifts")
+    #     for knowledge_drift in drift["knowledge_drifts"]:
+    #         # st.write(f"• {knowledge_drift{}}")
+    #         st.write(f"**Area** -> {knowledge_drift['area']}")
+    #         st.write(f"• {knowledge_drift['confluence']}")
+    #         st.write(f"• {knowledge_drift['ado']}")
+    #         st.write(f"**Impact** -> {knowledge_drift['impact']}")
             
-            st.divider()
+    #         st.divider()
 
-        st.subheader("✅ Suggested reviews for PM")
-        for review in drift["manual_review"]:
-            st.write(f"• {review}")
+    #     st.subheader("✅ Suggested reviews for PM")
+    #     for review in drift["manual_review"]:
+    #         st.write(f"• {review}")
 
-        quality = drift["analysis_quality"]
+    #     quality = drift["analysis_quality"]
 
-        st.subheader("📊 Analysis Quality")
+    #     st.subheader("📊 Analysis Quality")
 
-        st.metric(
-            "Confidence",
-            quality["confidence"]
-        )
+    #     st.metric(
+    #         "Confidence",
+    #         quality["confidence"]
+    #     )
 
-        st.caption(quality["reason"])
-    else:
-        st.error(f"Failed to generate AI summary. Error: {drift['error']}")
+    #     st.caption(quality["reason"])
+    # else:
+    #     st.error(f"Failed to generate AI summary. Error: {drift['error']}")
     
     st.subheader("Raw data")
-    with st.expander("Structured json output from llm"):
-        st.json(drift)
+    # with st.expander("Structured json output from llm"):
+    #     st.json(drift)
     with st.expander("Confluence and ADO parsed data"):
         ##########################################
         # Parse Confluence
@@ -133,12 +133,19 @@ if confluence_file and ado_file:
             st.subheader("ADO")
 
             st.write("### Feature")
+            st.write(f"Features Found: {len(ado['features'])}")
+            # temp code to view ADO parser result
+            for feature in ado["features"]:
+                st.write(feature["title"])
+                st.write("### Stories")
+                # for story in feature["stories"]:
+                st.write(len(feature["stories"]))
 
-            st.write(ado["feature_title"])
+            # st.write(ado["feature_title"])
 
-            st.write("### Stories")
+            # st.write("### Stories")
 
-            st.write(len(ado["stories"]))
+            # st.write(len(ado["stories"]))
 
             st.json(ado)
 

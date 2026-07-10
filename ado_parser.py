@@ -30,21 +30,21 @@ def parse_ado(uploaded_file):
     Returns
 
     Success:
-        (
-            True,
-            {
-                "feature_title": "...",
-                "stories": [...]
-            }
-        )
+    (
+        True,
+        {
+            "features": [...],
+            "orphan_stories": [...]
+        }
+    )
 
     Failure:
-        (
-            False,
-            {
-                "error": "..."
-            }
-        )
+    (
+        False,
+        {
+            "error": "..."
+        }
+    )
     """
 
     try:
@@ -66,58 +66,92 @@ def parse_ado(uploaded_file):
 
     df = df.fillna("")
 
-    stories = []
+    ###########################################
+    # Build Feature Dictionary
+    ###########################################
 
-    feature_title = ""
-
-    # Find Feature
+    features = {}
 
     feature_rows = df[
         df["Work Item Type"].astype(str).str.lower() == "feature"
     ]
 
-    if len(feature_rows) == 0:
+    if feature_rows.empty:
 
         return False, {
-            "error": "No Feature ticket found."
+            "error": "No Feature work items found."
         }
 
-    feature_title = normalize_value(
-        feature_rows.iloc[0]["Title"]
-    )
+    for _, row in feature_rows.iterrows():
 
-    # Parse Stories
+        ticket_id = normalize_value(row["Ticket ID"])
+
+        features[ticket_id] = {
+
+            "ticket_id": ticket_id,
+
+            "title": normalize_value(row["Title"]),
+
+            "description": normalize_value(row["Description"]),
+
+            "status": normalize_value(row["State"]),
+
+            "stories": []
+
+        }
+
+    ###########################################
+    # Attach Stories
+    ###########################################
+
+    orphan_stories = []
 
     story_rows = df[
         df["Work Item Type"].astype(str).str.lower() == "story"
     ]
 
-    if len(story_rows) == 0:
+    if story_rows.empty:
 
         return False, {
-            "error": "No Story tickets found."
+            "error": "No Story work items found."
         }
 
     for _, row in story_rows.iterrows():
 
-        stories.append(
+        story = {
 
-            {
-                "ticket_id": normalize_value(row["Ticket ID"]),
-                "title": normalize_value(row["Title"]),
-                "description": normalize_value(row["Description"]),
-                "acceptance_criteria": normalize_value(
-                    row["Acceptance Criteria"]
-                ),
-                "status": normalize_value(row["State"])
-            }
+            "ticket_id": normalize_value(row["Ticket ID"]),
 
-        )
+            "title": normalize_value(row["Title"]),
+
+            "description": normalize_value(row["Description"]),
+
+            "acceptance_criteria": normalize_value(
+                row["Acceptance Criteria"]
+            ),
+
+            "status": normalize_value(row["State"])
+
+        }
+
+        parent_id = normalize_value(row["Parent"])
+
+        if parent_id in features:
+
+            features[parent_id]["stories"].append(story)
+
+        else:
+
+            orphan_stories.append(story)
+
+    ###########################################
+    # Return
+    ###########################################
 
     return True, {
 
-        "feature_title": feature_title,
+        "features": list(features.values()),
 
-        "stories": stories
+        "orphan_stories": orphan_stories
 
     }
