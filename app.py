@@ -3,6 +3,7 @@ import streamlit as st
 from confluence_parser import parse_confluence
 from ado_parser import parse_ado
 from gemini_client import compare_documents
+from feature_resolver import resolve_feature
 
 st.set_page_config(
     page_title="Knowledge Drift Detector",
@@ -96,57 +97,93 @@ if confluence_file and ado_file:
     # else:
     #     st.error(f"Failed to generate AI summary. Error: {drift['error']}")
     
-    st.subheader("Raw data")
+    # st.subheader("Raw data")
     # with st.expander("Structured json output from llm"):
     #     st.json(drift)
-    with st.expander("Confluence and ADO parsed data"):
-        ##########################################
-        # Parse Confluence
-        ##########################################
 
-        col1, col2 = st.columns(2)
 
-        ##########################################
-        # Confluence Preview
-        ##########################################
+    ##########################################
+    # Resolve Feature
+    ##########################################
 
-        with col1:
+    success, match = resolve_feature(
+        confluence,
+        ado
+    )
 
-            st.subheader("Confluence")
+    if not success:
 
-            st.write("### Feature")
+        st.error("Unable to match feature.")
+        st.stop()
 
-            st.write(confluence["title"])
+    st.success("Artifacts parsed successfully.")
 
-            st.write("### Sections")
+    st.divider()
 
-            st.write(len(confluence["sections"]))
+    col1, col2 = st.columns(2)
 
-            st.json(confluence)
+    ##########################################
+    # Selecting ADO Feature based on match confidence
+    ##########################################
 
-        ##########################################
-        # ADO Preview
-        ##########################################
+    feature = None
 
-        with col2:
+    if match["confidence"] == "High":
 
-            st.subheader("ADO")
+        feature = match["selected_feature"]
 
-            st.write("### Feature")
-            st.write(f"Features Found: {len(ado['features'])}")
-            # temp code to view ADO parser result
-            for feature in ado["features"]:
-                st.write(feature["title"])
-                st.write("### Stories")
-                # for story in feature["stories"]:
-                st.write(len(feature["stories"]))
+        st.success(
+            f"Automatically matched feature "
+            f"(Confidence: {match['confidence']})"
+        )
 
-            # st.write(ado["feature_title"])
+    else:
 
-            # st.write("### Stories")
+        st.warning(
+            "Unable to confidently identify the correct feature."
+        )
 
-            # st.write(len(ado["stories"]))
+        options = []
 
-            st.json(ado)
+        lookup = {}
+
+        for candidate in match["candidate_features"]:
+
+            title = (
+                f"{candidate['feature']['title']} "
+                f"(Score: {candidate['score']})"
+            )
+
+            options.append(title)
+
+            lookup[title] = candidate["feature"]
+
+        selected = st.radio(
+            "Select the correct ADO Feature",
+            options
+        )
+
+        feature = lookup[selected]
+    
+    ##########################################
+    # Display Confluence and Matched ADO
+    ##########################################
+
+    with col1:
+
+        st.subheader("Confluence")
+
+        st.write("### Feature")
+
+        st.write(confluence["title"])
+
+        st.write(f"Sections: {len(confluence['sections'])}")
+
+    with col2:
+        st.subheader("Selected ADO Feature")
+
+        st.write(feature["title"])
+
+        st.write(f"Stories: {len(feature['stories'])}")
 
 
