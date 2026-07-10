@@ -79,9 +79,9 @@ if confluence_file and ado_file:
             
             st.divider()
 
-        # st.subheader("✅ Suggested reviews for PM")
-        # for review in drift["manual_review"]:
-        #     st.write(f"• {review}")
+        st.subheader("✅ Suggested reviews for PM")
+        for review in drift["manual_review"]:
+            st.write(f"• {review}")
 
         quality = drift["analysis_quality"]
 
