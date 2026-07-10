@@ -4,5 +4,4 @@ __pycache__/
 .env
 config.py
 gemini_client.py
-prompt_builder.py
 schemas.py
