@@ -1,0 +1,238 @@
+## Roadmap
+
+### v0.1 ✅
+- Compare one Confluence HTML page with one ADO Excel export
+- Detect semantic knowledge drift using Gemini
+- Structured HTML and ADO parsing
+- Structured AI outputs
+
+### v0.2 (Planned)
+- Multi-feature ADO support
+- Cross-validation
+- Drift severity
+- Source evidence
+- Improved UI
+
+### v1.0 (Planned)
+- Production-ready MVP
+- Better error handling
+- Performance improvements
+- Comprehensive test dataset
+
+### v2.0 (Future)
+- Multiple artifacts
+- Semantic retrieval
+- Embeddings
+- RAG
+- Multi-document drift detection
+- Suggested documentation updates
+
+
+# Knowledge Drift Detector
+
+An AI-powered assistant that compares functional specifications stored in Confluence with implementation details captured in Azure DevOps to identify knowledge drift during software delivery.
+
+The application uses structured document parsing together with Google's Gemini model to detect missing functionality, contradictory behaviour, incomplete documentation and implementation gaps before software is released.
+
+---
+
+## Problem Statement
+
+In enterprise software delivery, implementation evolves continuously throughout development.
+
+Design documents in Confluence are often created before development starts, while Azure DevOps stories are updated throughout implementation as developers, testers and Product Managers discover edge cases, additional validations and behavioural changes.
+
+As a result, the implementation gradually diverges from the original specification, causing documentation to become outdated.
+
+Reviewing these differences manually is time consuming and error prone.
+
+This project automates that comparison.
+
+---
+
+## Current MVP Scope (v0.1)
+
+The current prototype compares:
+
+- One Confluence HTML export
+- One Azure DevOps Excel export
+
+for the same business feature.
+
+The assistant identifies semantic differences between the intended design and the implemented behaviour.
+
+---
+
+## Features
+
+### Confluence Parser
+
+- Parses exported HTML pages
+- Extracts feature title
+- Creates structured sections using document headings
+
+### Azure DevOps Parser
+
+- Parses Excel exports
+- Extracts Feature metadata
+- Extracts Story title
+- Extracts Description
+- Extracts Acceptance Criteria
+- Preserves implementation details
+
+### AI Knowledge Drift Analysis
+
+The assistant compares both artifacts and identifies:
+
+- Missing implementation
+- Missing documentation
+- Behavioural differences
+- Validation rule differences
+- UI behaviour differences
+- Acceptance Criteria differences
+- Technical implementation gaps
+
+---
+
+## AI Architecture
+
+```
+Confluence HTML
+        │
+        ▼
+Confluence Parser
+
+Azure DevOps Excel
+        │
+        ▼
+ADO Parser
+
+        ▼
+
+Prompt Builder
+
+        ▼
+
+Gemini 2.5 Flash
+
+        ▼
+
+Knowledge Drift Report
+```
+
+Unlike Retrieval-Augmented Generation (RAG), this MVP performs a direct semantic comparison because the user explicitly provides both artifacts to compare.
+
+No retrieval step is required.
+
+---
+
+## Tech Stack
+
+- Python
+- Streamlit
+- BeautifulSoup
+- Pandas
+- OpenPyXL
+- Google Gemini 2.5 Flash
+- Google GenAI SDK
+
+---
+
+## Project Structure
+
+```
+knowledge-drift-detector/
+
+├── app.py
+├── app_startup.py
+├── config.py
+├── confluence_parser.py
+├── ado_parser.py
+├── prompt_builder.py
+├── schemas.py
+├── gemini_client.py
+├── requirements.txt
+├── README.md
+```
+
+---
+
+## Sample Output
+
+The assistant generates:
+
+- Executive Summary
+- Knowledge Drift Report
+- Confidence Assessment
+
+Each detected drift includes:
+
+- Area
+- Confluence Evidence
+- Azure DevOps Evidence
+- Impact
+
+---
+
+## Design Principles
+
+### Compare, Don't Summarize
+
+The objective is to identify knowledge drift rather than summarize documents.
+
+### Structured Inputs
+
+Both Confluence and Azure DevOps artifacts are converted into structured representations before being sent to the LLM.
+
+### Deterministic Parsing
+
+HTML and Excel parsing are handled entirely using deterministic Python code.
+
+The LLM is responsible only for semantic reasoning.
+
+### Modular Architecture
+
+The project separates:
+
+- Parsing
+- Prompt construction
+- AI communication
+- UI
+
+making the solution easy to maintain and extend.
+
+---
+
+## Current Limitations
+
+- Single Confluence page
+- Single Azure DevOps export 
+- Single business feature has to be of all stories for only one feature
+- No multi-feature hierarchy
+- No evidence highlighting
+- No severity scoring
+- No semantic retrieval
+- No document update recommendations
+
+---
+
+## Future Vision
+
+The long-term goal is to evolve this prototype into an enterprise Knowledge Drift Detection platform capable of comparing multiple knowledge sources, including:
+
+- Confluence
+- Azure DevOps
+- User Guides
+- FAQs
+- Release Notes
+- SharePoint documentation
+
+using semantic retrieval and Retrieval-Augmented Generation (RAG) to identify outdated or inconsistent knowledge across the enterprise.
+
+---
+
+## Why this project?
+
+This project explores how Generative AI can help Product Managers ensure that implementation and documentation remain aligned throughout the Software Development Life Cycle (SDLC).
+
+Rather than replacing documentation processes, the assistant reduces the effort required to identify documentation drift before release.
