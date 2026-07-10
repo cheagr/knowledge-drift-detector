@@ -36,12 +36,6 @@ with col2:
 
 if confluence_file and ado_file:
 
-    st.divider()
-
-    ##########################################
-    # Parse Confluence
-    ##########################################
-
     success, confluence = parse_confluence(confluence_file)
 
     if not success:
@@ -65,46 +59,6 @@ if confluence_file and ado_file:
     ##########################################
 
     st.success("Both artifacts parsed successfully.")
-
-    st.divider()
-
-    col1, col2 = st.columns(2)
-
-    ##########################################
-    # Confluence Preview
-    ##########################################
-
-    with col1:
-
-        st.subheader("Confluence")
-
-        st.write("### Feature")
-
-        st.write(confluence["title"])
-
-        st.write("### Sections")
-
-        st.write(len(confluence["sections"]))
-
-        st.json(confluence)
-
-    ##########################################
-    # ADO Preview
-    ##########################################
-
-    with col2:
-
-        st.subheader("ADO")
-
-        st.write("### Feature")
-
-        st.write(ado["feature_title"])
-
-        st.write("### Stories")
-
-        st.write(len(ado["stories"]))
-
-        st.json(ado)
 
     st.divider()
     with st.spinner("Generating AI comparision report"):
@@ -140,8 +94,52 @@ if confluence_file and ado_file:
 
         st.caption(quality["reason"])
     else:
-        st.error(f"Failed to generate AI summary. Error: {ai_summary['error']}")
+        st.error(f"Failed to generate AI summary. Error: {drift['error']}")
     
-    st.write("Raw output from LLM")
-    with st.expander("json output from llm"):
+    st.subheader("Raw data")
+    with st.expander("Structured json output from llm"):
         st.json(drift)
+    with st.expander("Confluence and ADO parsed data"):
+        ##########################################
+        # Parse Confluence
+        ##########################################
+
+        col1, col2 = st.columns(2)
+
+        ##########################################
+        # Confluence Preview
+        ##########################################
+
+        with col1:
+
+            st.subheader("Confluence")
+
+            st.write("### Feature")
+
+            st.write(confluence["title"])
+
+            st.write("### Sections")
+
+            st.write(len(confluence["sections"]))
+
+            st.json(confluence)
+
+        ##########################################
+        # ADO Preview
+        ##########################################
+
+        with col2:
+
+            st.subheader("ADO")
+
+            st.write("### Feature")
+
+            st.write(ado["feature_title"])
+
+            st.write("### Stories")
+
+            st.write(len(ado["stories"]))
+
+            st.json(ado)
+
+
