@@ -106,3 +106,42 @@ if confluence_file and ado_file:
 
         st.json(ado)
 
+    st.divider()
+    with st.spinner("Generating AI comparision report"):
+        success, drift = compare_documents(confluence,ado)
+
+    if success:
+        st.subheader("AI Compare ")
+        st.subheader("Executive Summary:")
+        st.write(drift["executive_summary"])
+            
+        st.subheader("⚠ Knowledge Drifts")
+        for knowledge_drift in drift["knowledge_drifts"]:
+            # st.write(f"• {knowledge_drift{}}")
+            st.write(f"**Area** -> {knowledge_drift['area']}")
+            st.write(f"• {knowledge_drift['confluence']}")
+            st.write(f"• {knowledge_drift['ado']}")
+            st.write(f"**Impact** -> {knowledge_drift['impact']}")
+            
+            st.divider()
+
+        # st.subheader("✅ Suggested reviews for PM")
+        # for review in drift["manual_review"]:
+        #     st.write(f"• {review}")
+
+        quality = drift["analysis_quality"]
+
+        st.subheader("📊 Analysis Quality")
+
+        st.metric(
+            "Confidence",
+            quality["confidence"]
+        )
+
+        st.caption(quality["reason"])
+    else:
+        st.error(f"Failed to generate AI summary. Error: {ai_summary['error']}")
+    
+    st.write("Raw output from LLM")
+    with st.expander("json output from llm"):
+        st.json(drift)
