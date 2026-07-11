@@ -22,6 +22,10 @@ KNOWLEDGE_DRIFT_SCHEMA = {
                         "type": "string"
                     },
 
+                    "severity":{
+                        "type":"string"
+                    },
+
                     "confluence": {
                         "type": "string"
                     },
@@ -32,42 +36,43 @@ KNOWLEDGE_DRIFT_SCHEMA = {
 
                     "impact": {
                         "type": "string"
+                    },
+                    "evidence": {
+
+                        "type": "object",
+
+                        "properties": {
+
+                            "confluence": {
+                                "type": "string"
+                            },
+
+                            "ado": {
+                                "type": "string"
+                            }
+                        }
                     }
-
                 }
-
             }
-
         },
 
         "manual_review": {
-
             "type": "array",
-
             "items": {
                 "type": "string"
             }
-
         },
 
         "analysis_quality": {
-
             "type": "object",
-
             "properties": {
-
                 "confidence": {
                     "type": "string"
                 },
-
                 "reason": {
                     "type": "string"
                 }
-
             }
-
         }
-
     }
-
 }

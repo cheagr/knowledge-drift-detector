@@ -20,8 +20,6 @@ def validate_uploads(confluence, ado):
     ##################################################
     # Confluence
     ##################################################
-    print(f"\n\n Performing Confluence Validations \n\n")
-    print(f"\n\nConfluence page Title: {confluence.get('title')}")
     if not confluence.get("title"):
         errors.append("Confluence feature title not found.")
 
@@ -104,7 +102,6 @@ def validate_selected_feature(feature):
     titles = set()
 
     for story in feature["stories"]:
-        print(f"Story Validation: {story}")
         if not story["title"]:
 
             errors.append(

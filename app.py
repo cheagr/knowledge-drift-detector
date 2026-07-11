@@ -121,7 +121,6 @@ if confluence_file and ado_file:
         st.warning(
             f"""
             Multiple potential ADO Features matching the Confluence were found.
-
             The best automatic match had **{match['confidence']} confidence**
             (score: {match['score']}).
 
@@ -183,28 +182,44 @@ if confluence_file and ado_file:
     ##########################################
 
     with st.spinner("Generating AI comparision report"):
-        success, drift = compare_documents(confluence,feature)
+        success, drifts = compare_documents(confluence,feature)
 
     if success:
         st.subheader("AI Compare ")
-        st.subheader("Executive Summary:")
-        st.write(drift["executive_summary"])
+        # st.json(drifts)
+        # st.subheader("Executive Summary")
+        # st.write(drift["executive_summary"])
             
         st.subheader("⚠ Knowledge Drifts")
-        for knowledge_drift in drift["knowledge_drifts"]:
-            # st.write(f"• {knowledge_drift{}}")
-            st.write(f"**Area** \n {knowledge_drift['area']}")
-            st.write(f" • {knowledge_drift['confluence']}")
-            st.write(f"• {knowledge_drift['ado']}")
-            st.write(f"**Impact** -> {knowledge_drift['impact']}")
+        for drift in drifts["knowledge_drifts"]:
+        
+            st.write(f"### {drift['area']}")
+    
+            severity = drift["severity"]
+            if severity == "High":
+                st.write(f"### Severity :red[{drift['severity']}]")
+            elif severity == "Medium":
+                st.write(f"### Severity :orange[{drift['severity']}]")
+            else:
+                st.write(f"### Severity :yellow[{drift['severity']}]")
+
+            st.write(f" • {drift['confluence']}")
+            st.write(f" • {drift['ado']}")
+            st.write("### Impact")
+            st.write(drift['impact'])
+
+            st.write("#### Evidence")
+            st.write(f"**Confluence:** {drift['evidence']['confluence']}")
+            st.write(f"**ADO:** {drift['evidence']['ado']}")
             
             st.divider()
 
         st.subheader("✅ Suggested reviews for PM")
-        for review in drift["manual_review"]:
+        # manual_review = drift.get("manual_review", "Not Available")
+        for review in drifts.get("manual_review", []):
             st.write(f"• {review}")
 
-        quality = drift["analysis_quality"]
+        quality = drifts.get("analysis_quality", "Unknown")
 
         st.subheader("📊 Analysis Quality")
 
@@ -215,7 +230,7 @@ if confluence_file and ado_file:
 
         st.caption(quality["reason"])
     else:
-        st.error(f"Failed to generate AI summary. Error: {drift['error']}")
+        st.error(f"Failed to generate AI summary. Error: {drifts['error']}")
     
 
     ##########################################
@@ -223,7 +238,7 @@ if confluence_file and ado_file:
     ##########################################
     st.subheader("Raw data")
     with st.expander("Structured json output from llm"):
-        st.json(drift)
+        st.json(drifts)
 
     with st.expander("Parsed artifacts data"):
         col1, col2 = st.columns(2)
