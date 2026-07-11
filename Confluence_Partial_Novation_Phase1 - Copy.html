@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>
+body{font-family:Arial,sans-serif;margin:40px;line-height:1.5}
+table{border-collapse:collapse}td,th{border:1px solid #999;padding:6px}
+h1,h2{color:#003366}.note{background:#eef7ff;padding:10px;border-left:4px solid #2b6cb0}
+</style></head><body>
+
+<h1>Partial Novation – Phase 1</h1>
+
+<table>
+<tr><th>Author</th><td>Product Management</td></tr>
+<tr><th>Status</th><td>Ready for Development</td></tr>
+<tr><th>Last Updated</th><td>15-Jan-2026</td></tr>
+<tr><th>Version</th><td>1.0</td></tr>
+</table>
+
+<div class="note">
+<b>Purpose</b><br>
+This specification describes the intended behaviour before implementation begins.
+</div>
+
+<h2>1. Business Overview</h2>
+<p>Partial Novation enables transfer of part of an OTC trade while retaining the remaining position.</p>
+
+<h2>2. Scope</h2>
+<ul>
+<li>Create Partial Novation request.</li>
+<li>Capture novation amount.</li>
+<li>Validate mandatory fields.</li>
+<li>Submit request for booking.</li>
+</ul>
+
+<h2>3. Functional Behaviour</h2>
+<ul>
+<li>User selects an eligible OTC trade.</li>
+<li>User enters partial amount.</li>
+<li>System validates mandatory inputs.</li>
+<li>System books the novated trade.</li>
+</ul>
+
+<h2>4. Validation Rules</h2>
+<ul>
+<li>Trade Date cannot be later than Business Date.</li>
+<li>Novation Amount must be greater than zero.</li>
+<li>Mandatory fields must be populated.</li>
+</ul>
+
+<h2>5. UI Behaviour</h2>
+<ul>
+<li>Settlement Date is editable.</li>
+<li>User can modify all entered values before submission.</li>
+<li>Validation messages appear below the affected field.</li>
+</ul>
+
+<h2>6. Error Messages</h2>
+<ul>
+<li>Trade Date cannot be greater than Business Date.</li>
+<li>Novation Amount is mandatory.</li>
+</ul>
+
+<h2>7. Out of Scope</h2>
+<ul>
+<li>Bulk Partial Novation.</li>
+<li>Cross-currency support.</li>
+<li>Audit reporting enhancements.</li>
+</ul>
+
+<h2>8. Known Limitations</h2>
+<ul>
+<li>Supports single trade only.</li>
+<li>No retry mechanism for failed booking requests.</li>
+</ul>
+
+</body></html>
