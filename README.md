@@ -1,35 +1,6 @@
-## Roadmap
-
-### v0.1 ✅
-- Compare one Confluence HTML page with one ADO Excel export
-- Detect semantic knowledge drift using Gemini
-- Structured HTML and ADO parsing
-- Structured AI outputs
-
-### v1.0.0 (Completed)
-
-- Multi-feature ADO support
-- Feature resolution
-- Artifact validation
-- AI-powered knowledge drift detection
-- Drift severity classification
-- Source evidence generation
-- Improved UI
-- Robust error handling
-- Production-ready MVP
-- Comprehensive test dataset
-
-### v2.0.0 (Planned)
-
-- Embedding-based semantic feature resolution
-- Status-aware drift analysis
-- Suggested knowledge synchronization
-- Multi-Confluence support
-- Multi-artifact comparison
-- Semantic retrieval (RAG)
-
-
 # Knowledge Drift Detector
+
+**Current Release:** v1.0.0
 
 An AI-powered assistant that compares functional specifications stored in Confluence with implementation details captured in Azure DevOps to identify knowledge drift during software delivery.
 
@@ -41,7 +12,7 @@ The application uses structured document parsing together with Google's Gemini m
 
 In enterprise software delivery, implementation evolves continuously throughout development.
 
-Design documents in Confluence are often created before development starts, while Azure DevOps stories are updated throughout implementation as developers, testers and Product Managers discover edge cases, additional validations and behavioural changes.
+Design documents in Confluence are often created before development starts, while Azure DevOps stories are updated throughout implementation as developers, testers ands Product Managers discover edge cases, additional validations and behavioural changes.
 
 As a result, the implementation could gradually diverge from the original specification, causing documentation to become outdated.
 
@@ -51,20 +22,27 @@ This project automates that comparison.
 
 ---
 
-## Current MVP Scope (v0.1)
 
-The current prototype compares:
+
+## Current Scope (v1.0.0)
+
+The application currently supports:
 
 - One Confluence HTML export
 - One Azure DevOps Excel export
-
-for the same business feature.
+- Multiple Features within an ADO export
+- Automatic feature resolution with user confirmation when required
+- AI-powered semantic knowledge drift detection
 
 The assistant identifies semantic differences between the intended design and the implemented behaviour.
 
 ---
 
+
+
 ## Features
+
+
 
 ### Confluence Parser
 
@@ -72,14 +50,31 @@ The assistant identifies semantic differences between the intended design and th
 - Extracts feature title
 - Creates structured sections using document headings
 
+
+
 ### Azure DevOps Parser
 
-- Parses Excel exports
-- Extracts Feature metadata
-- Extracts Story title
-- Extracts Description
-- Extracts Acceptance Criteria
-- Preserves implementation details
+- Parses Azure DevOps Excel exports
+- Supports multiple Features
+- Builds Feature → Story hierarchy
+- Detects orphan Stories
+- Preserves implementation metadata
+
+
+
+### Feature Resolver
+
+- Automatically resolves the best matching ADO Feature
+- Falls back to user selection when confidence is low
+
+
+
+### Artifact Validation
+
+- Validates uploaded artifacts before AI analysis
+- Detects missing sections, orphan Stories and incomplete Story data
+
+
 
 ### AI Knowledge Drift Analysis
 
@@ -94,6 +89,8 @@ The assistant compares both artifacts and identifies:
 - Technical implementation gaps
 
 ---
+
+
 
 ## AI Architecture
 
@@ -110,6 +107,14 @@ ADO Parser
 
         ▼
 
+Artifact Validation
+
+        ▼
+
+Feature Resolver
+
+        ▼
+
 Prompt Builder
 
         ▼
@@ -119,6 +124,7 @@ Gemini 2.5 Flash
         ▼
 
 Knowledge Drift Report
+
 ```
 
 Unlike Retrieval-Augmented Generation (RAG), this MVP performs a direct semantic comparison because the user explicitly provides both artifacts to compare.
@@ -126,6 +132,22 @@ Unlike Retrieval-Augmented Generation (RAG), this MVP performs a direct semantic
 No retrieval step is required.
 
 ---
+
+
+
+## Screenshots
+
+Upload Screen Upload
+
+Feature resolution (low confidence with user selection) ![Feature resolution ](assets/Manual_select_best_match_ado.png)
+
+Knowledge Drift Report Drift Report
+
+Developer View (parsed artifacts + raw JSON) Developer View
+
+---
+
+
 
 ## Tech Stack
 
@@ -139,6 +161,8 @@ No retrieval step is required.
 
 ---
 
+
+
 ## Project Structure
 
 ```
@@ -151,6 +175,8 @@ knowledge-drift-detector/
 ├── ado_parser.py
 ├── prompt_builder.py
 ├── schemas.py
+├── feature_resolver.py
+├── artifact_validator.py       
 ├── gemini_client.py
 ├── requirements.txt
 ├── README.md
@@ -158,24 +184,32 @@ knowledge-drift-detector/
 
 ---
 
+
+
 ## Sample Output
 
 The assistant generates:
 
 - Executive Summary
 - Knowledge Drift Report
-- Confidence Assessment
+- Analysis Quality
 
 Each detected drift includes:
 
 - Area
-- Confluence Evidence
-- Azure DevOps Evidence
-- Impact
+- Severity
+- Confluence Finding
+- Azure DevOps Finding
+- Evidence
+- Business Impact
 
 ---
 
+
+
 ## Design Principles
+
+
 
 ### Compare, Don't Summarize
 
@@ -204,18 +238,21 @@ making the solution easy to maintain and extend.
 
 ---
 
+
+
 ## Current Limitations
 
 - Single Confluence page
-- Single Azure DevOps export 
-- Single business feature has to be of all stories for only one feature
-- No multi-feature hierarchy
-- No evidence highlighting
-- No severity scoring
-- No semantic retrieval
-- No document update recommendations
+- HTML export only
+- Excel export only
+- Deterministic feature resolution
+- No status-aware drift analysis
+- No semantic retrieval (RAG)
+- No multi-artifact comparison
 
 ---
+
+
 
 ## Future Vision
 
@@ -231,6 +268,51 @@ The long-term goal is to evolve this prototype into an enterprise Knowledge Drif
 using semantic retrieval and Retrieval-Augmented Generation (RAG) to identify outdated or inconsistent knowledge across the enterprise.
 
 ---
+
+
+
+## Release History
+
+
+
+### v0.1 ✅
+
+- Compare one Confluence HTML page with one ADO Excel export
+- Detect semantic knowledge drift using Gemini
+- Structured HTML and ADO parsing
+- Structured AI outputs
+
+
+
+### v1.0.0 (Completed)
+
+- Multi-feature ADO support
+- Feature resolution
+- Artifact validation
+- AI-powered knowledge drift detection
+- Drift severity classification
+- Source evidence generation
+- Improved UI
+- Robust error handling
+- Production-ready MVP
+- Comprehensive test dataset
+
+
+
+## Roadmap
+
+
+
+### v2.0.0 (Planned)
+
+- Embedding-based semantic feature resolution
+- Status-aware drift analysis
+- Suggested knowledge synchronization
+- Multi-Confluence support
+- Multi-artifact comparison
+- Semantic retrieval (RAG)
+
+
 
 ## Why this project?
 
