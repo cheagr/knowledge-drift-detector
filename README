@@ -6,27 +6,27 @@
 - Structured HTML and ADO parsing
 - Structured AI outputs
 
-### v0.2 (Planned)
-- Multi-feature ADO support
-- Feature matching
-- Artifact validation
-- Drift severity
-- Source evidence
-- Improved UI
+### v1.0.0 (Completed)
 
-### v1.0 (Planned)
+- Multi-feature ADO support
+- Feature resolution
+- Artifact validation
+- AI-powered knowledge drift detection
+- Drift severity classification
+- Source evidence generation
+- Improved UI
+- Robust error handling
 - Production-ready MVP
-- Better error handling
-- Performance improvements
 - Comprehensive test dataset
 
-### v2.0 (Future)
-- Multiple artifacts
-- Semantic retrieval
-- Embeddings
-- RAG
-- Multi-document drift detection
-- Suggested documentation updates
+### v2.0.0 (Planned)
+
+- Embedding-based semantic feature resolution
+- Status-aware drift analysis
+- Suggested knowledge synchronization
+- Multi-Confluence support
+- Multi-artifact comparison
+- Semantic retrieval (RAG)
 
 
 # Knowledge Drift Detector
@@ -43,7 +43,7 @@ In enterprise software delivery, implementation evolves continuously throughout 
 
 Design documents in Confluence are often created before development starts, while Azure DevOps stories are updated throughout implementation as developers, testers and Product Managers discover edge cases, additional validations and behavioural changes.
 
-As a result, the implementation gradually diverges from the original specification, causing documentation to become outdated.
+As a result, the implementation could gradually diverge from the original specification, causing documentation to become outdated.
 
 Reviewing these differences manually is time consuming and error prone.
 

@@ -19,8 +19,6 @@ st.write(
     "for the same feature."
 )
 
-st.divider()
-
 col1, col2 = st.columns(2)
 
 with col1:
@@ -97,8 +95,7 @@ if confluence_file and ado_file:
         st.error("Unable to match feature.")
         st.stop()
 
-    st.success("Both Artifacts parsed successfully. ADO hierarchy built")
-
+    # st.success("✓ Artifacts validated successfully.")
     st.divider()
 
     ##########################################
@@ -185,43 +182,71 @@ if confluence_file and ado_file:
         success, drifts = compare_documents(confluence,feature)
 
     if success:
-        st.subheader("AI Compare ")
+        st.header("Knowledge Drift Report")
         # st.json(drifts)
         # st.subheader("Executive Summary")
         # st.write(drift["executive_summary"])
             
         st.subheader("⚠ Knowledge Drifts")
-        for drift in drifts["knowledge_drifts"]:
+        # for drift in drifts["knowledge_drifts"]:
         
-            st.write(f"### {drift['area']}")
+            # st.write(f"### {drift['area']}")
     
-            severity = drift["severity"]
-            if severity == "High":
-                st.write(f"### Severity :red[{drift['severity']}]")
-            elif severity == "Medium":
-                st.write(f"### Severity :orange[{drift['severity']}]")
-            else:
-                st.write(f"### Severity :yellow[{drift['severity']}]")
+            # severity = drift["severity"]
+            # if severity == "High":
+            #     st.write(f"### Severity :red[{drift['severity']}]")
+            # elif severity == "Medium":
+            #     st.write(f"### Severity :orange[{drift['severity']}]")
+            # else:
+            #     st.write(f"### Severity :yellow[{drift['severity']}]")
 
-            st.write(f" • {drift['confluence']}")
-            st.write(f" • {drift['ado']}")
-            st.write("### Impact")
-            st.write(drift['impact'])
+            # st.write(f" • {drift['confluence']}")
+            # st.write(f" • {drift['ado']}")
+            # st.write("### Impact")
+            # st.write(drift['impact'])
 
-            st.write("#### Evidence")
-            st.write(f"**Confluence:** {drift['evidence']['confluence']}")
-            st.write(f"**ADO:** {drift['evidence']['ado']}")
+            # st.write("#### Evidence")
+            # st.write(f"**Confluence:** {drift['evidence']['confluence']}")
+            # st.write(f"**ADO:** {drift['evidence']['ado']}")
             
-            st.divider()
+            # st.divider()
 
-        st.subheader("✅ Suggested reviews for PM")
-        # manual_review = drift.get("manual_review", "Not Available")
-        for review in drifts.get("manual_review", []):
-            st.write(f"• {review}")
+        for item in drifts.get("knowledge_drifts", []):
+
+            title = f"[{item.get('severity','Unknown')}] {item.get('area','Unnamed')}"
+
+            with st.expander(title):
+
+                st.write("### Confluence")
+                st.write(item.get("confluence","Not provided"))
+
+                st.write("### Azure DevOps")
+                st.write(item.get("ado","Not provided"))
+
+                st.write("### Evidence")
+
+                evidence = item.get("evidence", {})
+
+                st.write(
+                    f"**Confluence:** {evidence.get('confluence','Not provided')}"
+                )
+
+                st.write(
+                    f"**ADO:** {evidence.get('ado','Not provided')}"
+                )
+
+                st.write("### Impact")
+                st.write(item.get("impact","Not provided"))
+                
+        manual_review = drifts.get("manual_review", [])
+        if manual_review:
+            st.subheader("✅ ### Suggested reviews for PM")
+            for review in drifts.get("manual_review", []):
+                st.write(f"• {review}")
 
         quality = drifts.get("analysis_quality", "Unknown")
 
-        st.subheader("📊 Analysis Quality")
+        st.subheader("### 📊 Analysis Quality")
 
         st.metric(
             "Confidence",
@@ -236,7 +261,7 @@ if confluence_file and ado_file:
     ##########################################
     # Display Processed data
     ##########################################
-    st.subheader("Raw data")
+    st.subheader("Developer View")
     with st.expander("Structured json output from llm"):
         st.json(drifts)
 
