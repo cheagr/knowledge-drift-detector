@@ -91,5 +91,5 @@ def build_compare_prompt(confluence, ado) -> str:
         Azure DevOps:
         {ado}
     """
-    # print(f"Prompt from builder: {prompt}")
+   
     return prompt.strip()

@@ -137,13 +137,25 @@ No retrieval step is required.
 
 ## Screenshots
 
-Upload Screen Upload
+Upload Screen
 
-Feature resolution (low confidence with user selection) ![Feature resolution ](assets/Manual_select_best_match_ado.png)
+![Upload Screen](assets/upload-view.png)
 
-Knowledge Drift Report Drift Report
+Feature resolution (low confidence with user selection) 
+
+![Feature resolution](assets/Manual_select_best_match_ado.png)
+
+Knowledge Drift Report
+
+Drift Report
+
+Validator error on Confluence
+
+![Confluence Validator](assets/conflunce_validator_check_failure.png)
 
 Developer View (parsed artifacts + raw JSON) Developer View
+
+Developer View
 
 ---
 
