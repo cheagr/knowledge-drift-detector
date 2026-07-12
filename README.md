@@ -147,7 +147,7 @@ Feature resolution (low confidence with user selection)
 
 Knowledge Drift Report
 
-Drift Report
+![Drift Report](assets/knowledge_drift_report.png)
 
 Validator error on Confluence
 
@@ -155,7 +155,7 @@ Validator error on Confluence
 
 Developer View (parsed artifacts + raw JSON) Developer View
 
-Developer View
+![Developer View](assets/raw-data-displayed.png)
 
 ---
 
